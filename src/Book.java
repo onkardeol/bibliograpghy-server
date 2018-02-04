@@ -49,11 +49,12 @@ public final class Book {
 	public int getIsbn() {
 		return this.isbn;
 	}
-	
-	public boolean compareBook(Book book){
-		if(this.author == book.getAuthor && this.title == book.getTitle && this.year == book.getYear && this.publisher == book.getPublisher && this.isbn == book.getIsbn)
+
+	public boolean compareBook(Book book) {
+		if (this.author == book.getAuthor() && this.title == book.getTitle() && this.year == book.getYear()
+				&& this.publisher == book.getPublisher() && this.isbn == book.getIsbn())
 			return true;
-		
+
 		return false;
 	}
 
