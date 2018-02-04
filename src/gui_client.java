@@ -1,3 +1,5 @@
+package a104;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -22,6 +24,8 @@ public class gui_client extends JFrame {
 	private JTextField textFieldAuthor;
 	private JTextField textFieldTitle;
 	private JTextField textFieldIsbn;
+	private JTextField textField;
+	private JTextField textField_1;
 
 	/**
 	 * Launch the application.
@@ -119,6 +123,7 @@ public class gui_client extends JFrame {
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Add code for action here
+				
 			}
 		});
 		btnRemove.setBounds(6, 235, 200, 29);
@@ -146,5 +151,31 @@ public class gui_client extends JFrame {
 		textAreaOutput.setBounds(215, 21, 350, 350);
 		textAreaOutput.setEditable(false);
 		contentPane.add(textAreaOutput);
+		
+		JLabel lblIp = new JLabel("IP:");
+		lblIp.setBounds(6, 270, 61, 16);
+		contentPane.add(lblIp);
+		
+		JLabel lblPort = new JLabel("Port:");
+		lblPort.setBounds(6, 298, 61, 16);
+		contentPane.add(lblPort);
+		
+		textField = new JTextField();
+		textField.setBounds(73, 265, 130, 26);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(73, 293, 130, 26);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
+		
+		JButton btnConnect = new JButton("Connect");
+		btnConnect.setBounds(6, 330, 85, 29);
+		contentPane.add(btnConnect);
+		
+		JButton btnDisconnect = new JButton("Disconnect");
+		btnDisconnect.setBounds(86, 330, 117, 29);
+		contentPane.add(btnDisconnect);
 	}
 }
