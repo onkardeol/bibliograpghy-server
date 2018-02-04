@@ -7,11 +7,14 @@ public final class Book {
 	private int isbn = -1;
 
 	public Book(final String author, final String title, final int year, final String publisher, final int isbn) {
+		this.isbn = isbn;
 		this.author = author;
 		this.title = title;
 		this.year = year;
 		this.publisher = publisher;
-		this.isbn = isbn;
+	}
+
+	public Book() {
 	}
 
 	public void setAuthor(final String author) {

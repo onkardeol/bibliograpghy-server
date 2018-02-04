@@ -1,10 +1,14 @@
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -25,6 +29,8 @@ public class gui_client extends JFrame {
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextArea textAreaOutput;
+	
+	private Socket s;
 
 	public String getPublisher() {
 		return textFieldPublisher.getText();
@@ -51,6 +57,9 @@ public class gui_client extends JFrame {
 
 	public String getIsbn() {
 		return textFieldIsbn.getText();
+	}
+	public void setText(String text) {
+		textAreaOutput.append("\n" + text);
 	}
 
 	/**
@@ -141,7 +150,14 @@ public class gui_client extends JFrame {
 		btnSubmit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Add code for action here
+				try {
+					PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+					p.println(textFieldIsbn.getText() + "," + textFieldAuthor.getText() + "," + textFieldYear.getText() + "," + Integer.parseInt(textFieldYear.getText() + "," + textFieldPublisher.getText()));
+					
+					Scanner sOut = new Scanner(s.getInputStream());
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Could not SUBMIT: " + ex);
+				}
 			}
 		});
 		btnSubmit.setBounds(6, 160, 200, 29);
@@ -202,10 +218,32 @@ public class gui_client extends JFrame {
 		textField_1.setColumns(10);
 
 		JButton btnConnect = new JButton("Connect");
+		btnConnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					s = new Socket(textField.getText(), Integer.parseInt(textField_1.getText()));
+					textAreaOutput.append("Connected to server");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Could not connect to server: " + ex);
+				}
+			}
+		});
 		btnConnect.setBounds(6, 330, 85, 29);
 		contentPane.add(btnConnect);
 
 		JButton btnDisconnect = new JButton("Disconnect");
+		btnDisconnect.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					s.close();
+					textAreaOutput.append("Disconnected from server");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Could not disconnect from server: " + ex);
+				}
+			}
+		});
 		btnDisconnect.setBounds(86, 330, 117, 29);
 		contentPane.add(btnDisconnect);
 	}
