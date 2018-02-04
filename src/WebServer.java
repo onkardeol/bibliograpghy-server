@@ -16,13 +16,17 @@ public class WebServer {
 		random = sc.nextLine();
 		temp = random + " server";
 		PrintStream p = new PrintStream(ss.getOutputStream());
-		dataStructure.add(new Book("Rishhi", "Title", 1997, "rndom", 1234));
-		p.println(random + " server response");
+		Book x = (new Book("Rishhi", "Title", 1997, "rndom", 1234));
+		p.println(x.toString());
 		sc.close();
 		serverSocket.close();
 	}
 
-	public void insertBook(Book book) {
+	public static void insertBook(Book book) {
 		dataStructure.add(book);
+	}
+
+	public static ArrayList<Book> returnData() {
+		return WebServer.dataStructure;
 	}
 }

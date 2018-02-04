@@ -1,9 +1,9 @@
 
 public final class Book {
-	private String author = null;
-	private String title = null;
+	private String author = "";
+	private String title = "";
 	private int year = -1;
-	private String publisher = null;
+	private String publisher = "";
 	private int isbn = -1;
 
 	public Book(final String author, final String title, final int year, final String publisher, final int isbn) {
@@ -52,8 +52,8 @@ public final class Book {
 
 	@Override
 	public String toString() {
-		return (this.author + "\nTitle: " + this.title + "\nYear: " + this.year + "\n Publisher: " + this.publisher
-				+ "\n ISBN: " + this.isbn);
+		return ("Author: " + this.author + " Title: " + this.title + " Year: " + this.year + " Publisher: "
+				+ this.publisher + " ISBN: " + this.isbn);
 
 	}
 }
