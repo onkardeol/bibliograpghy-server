@@ -23,7 +23,15 @@ public class WebServer {
 	}
 
 	public static void insertBook(Book book) {
-		dataStructure.add(book);
+		int i;
+		for(i = 0; i < dataStructure.size(); i++){
+			if(dataStructure[i].compareBook(book) == true){
+				// Input msg to output to console that adding book is duplicate.
+				break;
+			} else {
+				dataStructure.add(book);
+			}
+		}
 	}
 
 	public static ArrayList<Book> returnData() {
