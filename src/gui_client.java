@@ -152,8 +152,8 @@ public class gui_client extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					PrintWriter p = new PrintWriter(s.getOutputStream(), true);
-					p.println(textFieldIsbn.getText() + "," + textFieldAuthor.getText() + "," + textFieldYear.getText() + "," + Integer.parseInt(textFieldYear.getText() + "," + textFieldPublisher.getText()));
-					
+					p.println(textFieldIsbn.getText() + "," + textFieldAuthor.getText() + "," + textFieldTitle.getText() + "," + Integer.parseInt(textFieldYear.getText()) + "," + textFieldPublisher.getText());
+					textAreaOutput.append("SUBMIT successful.");
 					Scanner sOut = new Scanner(s.getInputStream());
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Could not SUBMIT: " + ex);
