@@ -24,6 +24,34 @@ public class gui_client extends JFrame {
 	private JTextField textFieldIsbn;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTextArea textAreaOutput;
+
+	public String getPublisher() {
+		return textFieldPublisher.getText();
+	}
+
+	public int getYear() {
+		int year = 0;
+		try {
+			year = Integer.parseInt(textFieldPublisher.getText());
+		} catch (NumberFormatException e) {
+			textAreaOutput.setText("please enter a Integer into Year");
+		}
+		return year;
+	}
+
+	public String getAuthor() {
+		return textFieldAuthor.getText();
+	}
+
+	@Override
+	public String getTitle() {
+		return textFieldTitle.getText();
+	}
+
+	public String getIsbn() {
+		return textFieldIsbn.getText();
+	}
 
 	/**
 	 * Launch the application.
@@ -150,7 +178,7 @@ public class gui_client extends JFrame {
 		btnGet.setBounds(6, 210, 200, 29);
 		contentPane.add(btnGet);
 
-		JTextArea textAreaOutput = new JTextArea();
+		textAreaOutput = new JTextArea();
 		textAreaOutput.setBounds(215, 21, 350, 350);
 		textAreaOutput.setEditable(false);
 		contentPane.add(textAreaOutput);

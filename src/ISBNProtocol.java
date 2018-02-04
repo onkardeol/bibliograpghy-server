@@ -4,6 +4,7 @@ public class ISBNProtocol {
 	ArrayList<Book> dataStructure = WebServer.returnData();
 	ArrayList<Book> returnList;
 	String change = null;
+	int year = gui_client.getYear();
 
 	ISBNProtocol() {
 
@@ -14,7 +15,7 @@ public class ISBNProtocol {
 		String[] split = input.split(",");
 
 		if (change.equals("SUBMIT")) {
-			Book newBook = new Book(split[0], split[1], Integer.parseInt(split[2]), split[3],
+			Book newBook = new Book(gui_client.getAuthor(), split[1], Integer.parseInt(split[2]), split[3],
 					Integer.parseInt(split[4]));
 			WebServer.insertBook(newBook);
 		} else if (change.equals("UPDATE")) {
