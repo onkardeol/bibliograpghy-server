@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.*;
 
 public class WebServer {
-	//private static ArrayList<Book> dataStructure = new ArrayList<Book>();
+	private static ArrayList<Book> dataStructure = new ArrayList<Book>();
 	
     public static void main(String argv[]) throws Exception {
 		// Get the port number from the command line.
@@ -34,7 +34,6 @@ public class WebServer {
 		    thread.start();
 		}
     }
-}
 
 //	public static void main(String[] args) throws IOException {
 //		String random, temp;
@@ -50,18 +49,19 @@ public class WebServer {
 //		serverSocket.close();
 //	}
 //
-//	public static void insertBook(Book book) {
-//		int i;
-//		for (i = 0; i < dataStructure.size(); i++) {
-//			if (dataStructure.get(i).compareBook(book) == true) {
-//				// Input msg to output to console that adding book is duplicate.
-//				break;
-//			} else {
-//				dataStructure.add(book);
-//			}
-//		}
-//	}
-//
-//	public static ArrayList<Book> returnData() {
-//		return WebServer.dataStructure;
-//	}
+	public static void insertBook(Book book) {
+		int i;
+		for (i = 0; i < dataStructure.size(); i++) {
+			if (dataStructure.get(i).compareBook(book) == true) {
+					System.out.println("Sorry my friend");
+				break;
+			} else {
+				dataStructure.add(book);
+			}
+		}
+	}
+
+	public static ArrayList<Book> returnData() {
+		return WebServer.dataStructure;
+	}
+}

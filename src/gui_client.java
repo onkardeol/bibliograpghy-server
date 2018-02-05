@@ -1,6 +1,7 @@
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -39,9 +40,13 @@ public class gui_client extends JFrame {
 	public int getYear() {
 		int year = 0;
 		try {
-			year = Integer.parseInt(textFieldPublisher.getText());
+			year = Integer.parseInt(textFieldYear.getText());
+			if (year < 0) {
+				textAreaOutput.setText("Please enter an Integer above 0 into Year.\n");
+				return -1;
+			}
 		} catch (NumberFormatException e) {
-			textAreaOutput.setText("please enter a Integer into Year");
+			textAreaOutput.setText("Please enter an Integer above 0 into Year SDF.\n");
 		}
 		return year;
 	}
@@ -56,8 +61,38 @@ public class gui_client extends JFrame {
 	}
 
 	public String getIsbn() {
-		return textFieldIsbn.getText();
+		boolean isValid = isValid(textFieldIsbn.getText());
+		if (isValid) {
+			return textFieldIsbn.getText();
+		} else
+			textAreaOutput.append("ISBN is not valid\n");
+		return null;
 	}
+
+	public boolean isValid(String isbn) {
+		if (isbn == null) {
+			return false;
+		}
+		isbn = isbn.replaceAll("-", "");
+		if (isbn.length() != 13) {
+			return false;
+		}
+		try {
+			int tot = 0;
+			for (int i = 0; i < 12; i++) {
+				int digit = Integer.parseInt(isbn.substring(i, i + 1));
+				tot += (i % 2 == 0) ? digit * 1 : digit * 3;
+			}
+			int checksum = 10 - (tot % 10);
+			if (checksum == 10) {
+				checksum = 0;
+			}
+			return checksum == Integer.parseInt(isbn.substring(12));
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
+	
 	public void setText(String text) {
 		textAreaOutput.append("\n" + text);
 	}
@@ -151,10 +186,13 @@ public class gui_client extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					PrintWriter p = new PrintWriter(s.getOutputStream(), true);
-					p.println(textFieldIsbn.getText() + "," + textFieldAuthor.getText() + "," + textFieldTitle.getText() + "," + Integer.parseInt(textFieldYear.getText()) + "," + textFieldPublisher.getText());
-					textAreaOutput.append("SUBMIT successful.");
-					Scanner sOut = new Scanner(s.getInputStream());
+					if(!isValid(getIsbn())) {
+						
+					} else {
+						PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+						p.println(cleanMsg("SUBMIT"));
+						textAreaOutput.append("SUBMIT successful.\n");
+					}
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Could not SUBMIT: " + ex);
 				}
@@ -168,7 +206,17 @@ public class gui_client extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Add code for action here
-
+				int confirmRemove = -1;
+				confirmRemove = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove?","Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				if(confirmRemove == -1 || confirmRemove == JOptionPane.YES_OPTION) {
+					try {
+						PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+						p.println(cleanMsg("REMOVE"));
+						textAreaOutput.append("REMOVE successful.\n");
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Could not SUBMIT: " + e1);
+					}
+				}
 			}
 		});
 		btnRemove.setBounds(6, 235, 200, 29);
@@ -178,7 +226,17 @@ public class gui_client extends JFrame {
 		btnUpdate.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Add code for action here
+				try {
+					if(!isValid(getIsbn())) {
+						
+					} else {
+						PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+						p.println(cleanMsg("SUBMIT"));
+						textAreaOutput.append("SUBMIT successful.\n");
+					}
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Could not UPDATE: " + ex);
+				}
 			}
 		});
 		btnUpdate.setBounds(6, 185, 200, 29);
@@ -188,7 +246,22 @@ public class gui_client extends JFrame {
 		btnGet.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Add code for action here
+
+				try {
+					Scanner x = new Scanner(s.getInputStream());
+					//textAreaOutput.append(x.nextLine());
+					System.out.println(x.nextLine());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					//JOptionPane.showMessageDialog(null, "Could not GET: " + e1);
+				}
+				try {
+					PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+					//p.println(cleanMsg("GET"));
+					textAreaOutput.append("GET successful.\n");
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(null, "Could not GET: " + ex);
+				}
 			}
 		});
 		btnGet.setBounds(6, 210, 200, 29);
@@ -223,7 +296,7 @@ public class gui_client extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					s = new Socket(textField.getText(), Integer.parseInt(textField_1.getText()));
-					textAreaOutput.append("Connected to server");
+					textAreaOutput.append("Connected to server.\n");
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Could not connect to server: " + ex);
 				}
@@ -238,7 +311,7 @@ public class gui_client extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					s.close();
-					textAreaOutput.append("Disconnected from server");
+					textAreaOutput.append("Disconnected from server.\n");
 				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(null, "Could not disconnect from server: " + ex);
 				}
@@ -246,5 +319,46 @@ public class gui_client extends JFrame {
 		});
 		btnDisconnect.setBounds(86, 330, 117, 29);
 		contentPane.add(btnDisconnect);
+	}
+	
+	public Boolean checkForIsbn() {
+		if(textFieldIsbn.getText().length() == 0) {
+			return false;
+		}
+		return true;
+	}
+	
+	public String cleanMsg(String input) {
+		String returnString = "";
+		returnString += input + ",";
+		
+		if(textFieldIsbn.getText().length() == 0) {
+			returnString += "null,";
+		} else {
+			returnString += getIsbn() + ",";
+		}
+		
+		if(textFieldAuthor.getText().length() == 0) {
+			returnString += "null,";
+		} else {
+			returnString += getAuthor() + ",";
+		}
+		
+		if(textFieldTitle.getText().length() == 0) {
+			returnString += "null,";
+		} else {
+			returnString += getTitle() + ",";
+		}
+		if(textFieldYear.getText().length() == 0) {
+			returnString += "null,";
+		} else {
+			returnString += getYear() + ",";
+		}
+		if(textFieldPublisher.getText().length() == 0) {
+			returnString += "null";
+		} else {
+			returnString += getPublisher();
+		}
+		return returnString;
 	}
 }
